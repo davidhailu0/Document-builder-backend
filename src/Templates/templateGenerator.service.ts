@@ -32,11 +32,15 @@ export class TemGenService {
     return template;
   }
 
-  async createdTemplate(authorEmail: string){
-    const createdTemplate = await this.temRepository.find({where:{authorEmail}});
+  async createdTemplate(authorID: string){
+    const createdTemplate = await this.temRepository.find({where:{authorID}});
     return createdTemplate?createdTemplate:[];
   }
 
+  async getWrittenTemplates(authorID:string){
+    const templateList = await this.temRepository.find({where:{authorID}})
+    return templateList?templateList:[];
+  }
   async checkAvailability(templateName:string){
     const foundTemplate = await this.temRepository.findOne({where:{templateName}});
     return foundTemplate?true:false;
@@ -46,7 +50,6 @@ export class TemGenService {
     const templates = await this.temRepository.find({
       where:{templateName:Like(`${searchTerm}%`)}
     });
-    console.log(templates);
     return templates?templates:[];
   }
 
@@ -83,10 +86,21 @@ export class TemGenService {
       Object.assign(newsection, section);
       return await this.sectionRepository.save(newsection);
   }
+
   async addSubsection(subsectionBody:CreateSubsectionDto){
     const newSubsection = new SubsectionEntity();
       Object.assign(newSubsection,subsectionBody);
       return await this.subsection.save(newSubsection);
+  }
+
+  async getSelectedTemplateSection(templateName: string){
+    const selectedTemplateSection = await this.sectionRepository.find({where:{templateName}})
+    return selectedTemplateSection;
+  }
+
+  async getSelectedTemplateSubsection(templateName: string){
+    const selectedTemplateSubsection = await this.subsection.find({where:{templateName}})
+    return selectedTemplateSubsection;
   }
 
   async updateSection(sectionNum: string,templateName:string,updateSection: UpdateSectionDto) {

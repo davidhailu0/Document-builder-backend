@@ -42,6 +42,7 @@ export class AuthService {
   async login(loginData: LoginUserDto): Promise<ResponseFormat> {
     const user = await this.userRepository.findOne({
       select: {
+        id:true,
         email: true,
         password: true,
         first_name: true,

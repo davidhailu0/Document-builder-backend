@@ -14,7 +14,7 @@ export class TemplateEntity {
   templateAuthor: string;
 
   @Column()
-  authorEmail: string;
+  authorID: string;
   
   @Column({ default: false })
   IsApproved: boolean;

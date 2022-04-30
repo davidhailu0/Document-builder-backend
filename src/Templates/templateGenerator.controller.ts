@@ -20,7 +20,12 @@ export class TemGenController {
   @Get('checkAvailability')
   async checkAvailability(@Query() templateInfo){
     const {templateName} = templateInfo;
-    return this.temService.checkAvailability(templateName);
+    return await this.temService.checkAvailability(templateName);
+  }
+
+  @Get('writtenTemplate/:authorID')
+  async getWrittenTemplate(@Param('authorID') authorID){
+    return await this.temService.getWrittenTemplates(authorID);
   }
 
   @Post('createTemplate')
@@ -36,7 +41,7 @@ export class TemGenController {
   }
   @Get('getTopTemplates')
   async getTopTemplate(){
-    return this.temService.getTopTemplates();
+    return await this.temService.getTopTemplates();
   }
   @Get('searchTemplate')
   async searchTemplate(@Query() searchTemplateInfo) {
@@ -48,6 +53,18 @@ export class TemGenController {
   async createdTemplate(@Query() createdTemplateInfo) {
     const {authorEmail} = createdTemplateInfo;
     return await this.temService.createdTemplate(authorEmail);
+  }
+
+  @Get('selectedTemplateSection/:templateName')
+  async getSelectedTemplateSection(@Param() param){
+    const templateName = param.templateName
+    return await this.temService.getSelectedTemplateSection(templateName)
+  }
+
+  @Get('selectedTemplateSubsection/:templateName')
+  async getSelectedTemplateSubsection(@Param() param){
+    const templateName = param.templateName
+    return await this.temService.getSelectedTemplateSubsection(templateName)
   }
 
   @Delete('deleteTemplate')
@@ -62,7 +79,7 @@ export class TemGenController {
   @Post('addSubsection')
   async addSubsection(@Body('subsection') subsectionData){
     const subsection: CreateSubsectionDto = subsectionData;
-    return this.temService.addSubsection(subsection);
+    return await this.temService.addSubsection(subsection);
   }
   @Patch('updateSection')
   async updateSection(
@@ -78,7 +95,7 @@ export class TemGenController {
   @Patch('updateSectionNumber')
   async updateSectionNumber(@Body() sectionBody:any){
      const {sectionNumber,newSectionNumber,templateName} = sectionBody;
-     this.temService.updateSectionNumber(sectionNumber,newSectionNumber,templateName);
+     return await this.temService.updateSectionNumber(sectionNumber,newSectionNumber,templateName);
   }
 
   @Patch('updateSubsection')
@@ -86,13 +103,13 @@ export class TemGenController {
     const {templateName, subsectionNumber} = subsectionBody;
     delete subsectionBody.templateName;
     delete subsectionBody.subsectionNumber;
-    return this.temService.updateSubsection(subsectionNumber,templateName,subsectionBody);
+    return await this.temService.updateSubsection(subsectionNumber,templateName,subsectionBody);
   }
   @Patch('updateSubsectionNumber')
   async updateSubsectionNumber(@Body() subsectionBody){
     const { subsectionNumber, newSubsectionNumber, templateName } =
       subsectionBody;
-    return this.temService.updateSubsectionNumber(subsectionNumber,newSubsectionNumber,templateName)
+    return await this.temService.updateSubsectionNumber(subsectionNumber,newSubsectionNumber,templateName)
   }
   
   @Delete('deleteSection')
@@ -104,6 +121,6 @@ export class TemGenController {
   @Delete('deleteSubsection')
   async deleteSubsection(@Query() subsectionBody){
     const { subsectionNumber, templateName } = subsectionBody;
-    return this.temService.deleteSubsection(subsectionNumber, templateName);
+    return await this.temService.deleteSubsection(subsectionNumber, templateName);
   }
 }
